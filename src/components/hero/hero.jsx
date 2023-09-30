@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { ArrowDown2, Copy, Edit } from "iconsax-react";
 
 import fb from "../../assets/fb.svg";
@@ -5,7 +6,7 @@ import whatsapp from "../../assets/whatsapp.svg";
 import telegram from "../../assets/telegram.svg";
 import bigger_video_frame from "../../assets/bigger_video_frame.png";
 
-const Hero = () => {
+const Hero = ({ handleModalOpen }) => {
     const socials = [
         { text: "Facebook", img: fb },
         { text: "WhatsApp", img: whatsapp },
@@ -29,7 +30,9 @@ const Hero = () => {
                             className="focus:outline-none bg-transparent border-transparent border-none flex-1 h-full"
                             placeholder="enter email of receiver" 
                         />
-                        <button className="py-1.5 rounded text-white text-center font-medium px-4 bg-[#605C84]"> Send </button>
+                        <button 
+                            onClick={handleModalOpen} 
+                            className="py-1.5 cursor-pointer rounded text-white text-center font-medium px-4 bg-[#605C84]"> Send </button>
                 </section>     
 
                 <section className="mt-10">

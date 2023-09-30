@@ -20,12 +20,12 @@ function App() {
   return (
     <>
         <section className={`${modal ? "w-full" : "w-0"} bg-color21 h-full top-0 left-0 z-30 transition-all fixed overflow-hidden`} />
-        <Modal />
+        <Modal modal={modal} handleModalClose={handleModalClose} />
         <header>
           <Navbar />
         </header>
         <main>
-          <Hero />
+          <Hero handleModalOpen={handleModalOpen} />
           <ComponentBeforeFooter />
         </main>
         <Footer />
