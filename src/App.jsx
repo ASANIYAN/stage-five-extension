@@ -1,34 +1,21 @@
-import { useState } from 'react'
-import './App.css'
-import ComponentBeforeFooter from './components/component-before-footer/component-before-footer'
-import Footer from './components/footer/footer'
-import Hero from './components/hero/hero'
-import Navbar from './components/navbar/navbar'
-import Modal from './components/modal/modal'
+import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
+import './App.css';
+import Home from './pages/home';
+import Record from './pages/record';
 
 function App() {
-  const [modal, setModal] = useState(true);
 
-  const handleModalOpen = () => {
-    setModal(true);
-  }
-
-  const handleModalClose = () => {
-    setModal(false);
-  }
-
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <>
+        <Route path="/" element={<Home />} />
+        <Route path="/record" element={<Record />} />
+      </>
+    )
+  );
   return (
     <>
-        <section className={`${modal ? "w-full" : "w-0"} bg-color21 h-full top-0 left-0 z-30 transition-all fixed overflow-hidden`} />
-        <Modal modal={modal} handleModalClose={handleModalClose} />
-        <header>
-          <Navbar />
-        </header>
-        <main>
-          <Hero handleModalOpen={handleModalOpen} />
-          <ComponentBeforeFooter />
-        </main>
-        <Footer />
+      <RouterProvider router={router} />
     </>
   )
 }

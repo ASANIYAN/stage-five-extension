@@ -6,7 +6,7 @@ const Modal = ({modal, handleModalClose }) => {
 
     return (
         <section 
-        className={`${modal ? "opacity-100" : "opacity-0 -z-40"} transition-all shadow-md bg-white rounded-3xl w-[450px] px-5 py-10 left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-30 absolute overflow-hidden`}>
+        className={`${modal ? "opacity-100 z-30" : "opacity-0 -z-30"} transition-all shadow-md bg-white rounded-3xl w-[450px] px-5 py-10 left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] absolute overflow-hidden`}>
             <section className="flex justify-end">
                 <CloseCircle size="32" color="#120B48" className="cursor-pointer" onClick={handleModalClose} />
             </section>
