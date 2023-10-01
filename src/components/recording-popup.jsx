@@ -1,14 +1,23 @@
 /* eslint-disable react/prop-types */
-import { CloseCircle, Copy, Microphone2, Screenmirroring, Setting2, Video } from "iconsax-react";
-import logo from "../assets/logo.svg";
-import Toggle from "./input/toggle";
-import { useEffect, useState } from "react";
+
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useReactMediaRecorder } from "react-media-recorder";
 
-const RecordingPopup = ({setBlob}) => {
+import { CloseCircle, Copy, Microphone2, Screenmirroring, Setting2, Video } from "iconsax-react";
+
+import Toggle from "./input/toggle";
+
+import logo from "../assets/logo.svg";
+import { SuccessToast } from "./toast/toasts";
+
+const RecordingPopup = () => {
+    const navigate = useNavigate();
+
     const [camera, setCamera] = useState(false);
     const [audio, setAudio] = useState(false);
     const [recording, setRecording] = useState(false);
+
 
     const handleCameraPermission = () => {
         setCamera(prev => !prev);
@@ -20,24 +29,28 @@ const RecordingPopup = ({setBlob}) => {
 
 
 
-    const { status, startRecording, stopRecording, mediaBlobUrl } = useReactMediaRecorder({ 
+    const { startRecording, stopRecording } = useReactMediaRecorder({ 
         screen: true, 
         askPermissionOnMount: true,
         onStart: () => {
             setRecording(true);
+            SuccessToast("Recording Started");
         },
-        onStop: () => {
+        onStop: (blobUrl) => {
+            localStorage.setItem("blob", blobUrl);
             setRecording(false);
+            SuccessToast("Recording Ended");
+            navigate("record", {replace: true});
         }
     });
 
     const handleRecording = () => {
-        recording ? stopRecording() : startRecording();
+        if (recording) {
+            stopRecording();
+        } else {
+            startRecording();
+        } 
     }
-
-    useEffect(() => {
-        setBlob(mediaBlobUrl);
-    }, [mediaBlobUrl])
 
     return (
         <section className="absolute top-2.5 right-5 w-[300px] h-[440px] bg-white pt-5 px-5 rounded-3xl shadow-md space-y-8">
@@ -81,7 +94,7 @@ const RecordingPopup = ({setBlob}) => {
             <section className="border border-color1 rounded-xl flex justify-between p-2.5">
                 <section className="flex gap-2">
                     <Microphone2 size="24" color="#0F172A"/>
-                    <span className="text-color1 text-sm font-medium"> Camera </span>
+                    <span className="text-color1 text-sm font-medium"> Audio </span>
                 </section>
                 <Toggle 
                     name={"audio"}
@@ -98,8 +111,6 @@ const RecordingPopup = ({setBlob}) => {
                     {recording ? 'Stop Recording' : 'Start Recording'}  
                 </button>
             </section>
-
-            <p> {status} </p>
 
         </section>
     );

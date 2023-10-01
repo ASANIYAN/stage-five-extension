@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import ComponentBeforeFooter from "../components/component-before-footer/component-before-footer";
 import Footer from "../components/footer/footer";
@@ -21,11 +22,11 @@ const Record = () => {
         <section className={`${modal ? "w-full" : "w-0"} bg-color21 h-full top-0 left-0 z-30 transition-all fixed overflow-hidden`} />
         <Modal modal={modal} handleModalClose={handleModalClose} />
         <header>
-        <Navbar />
+          <Navbar />
         </header>
         <main>
-        <Hero handleModalOpen={handleModalOpen} />
-        <ComponentBeforeFooter />
+          <Hero handleModalOpen={handleModalOpen} />
+          <ComponentBeforeFooter />
         </main>
         <Footer />
     </>

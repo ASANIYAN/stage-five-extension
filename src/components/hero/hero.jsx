@@ -13,6 +13,8 @@ const Hero = ({ handleModalOpen }) => {
         { text: "Telegram", img: telegram },
     ];
 
+    const blobFromStorage = localStorage.getItem("blob") ? localStorage.getItem("blob") : "" ;
+
     return (
         <section className="px-16 mt-20 flex gap-10">
 
@@ -60,7 +62,8 @@ const Hero = ({ handleModalOpen }) => {
 
             <section>
                 <section className="border border-color16 bg-color17 p-3 rounded-3xl w-full h-[400px]">
-                    <img src={bigger_video_frame} className="h-full w-full" alt="bigger_video_frame" />
+                    { blobFromStorage && <video src={blobFromStorage} className="h-full w-full" controls autoPlay loop />}
+                    { !blobFromStorage && <img src={bigger_video_frame} className="h-full w-full" alt="bigger_video_frame" />}
                 </section>
 
                 <section className="mt-10">

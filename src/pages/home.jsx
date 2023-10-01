@@ -1,13 +1,11 @@
-import { useState } from "react";
+/* eslint-disable react/prop-types */
 import RecordingPopup from "../components/recording-popup";
 
 const Home = () => {
-    const [ blob, setBlob ] = useState("");
 
     return (
         <>
-            <RecordingPopup setBlob={setBlob} />
-            { blob && <video src={blob} controls autoPlay loop />}
+            <RecordingPopup />
         </>
     );
 }
