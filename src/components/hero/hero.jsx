@@ -6,13 +6,13 @@ import whatsapp from "../../assets/whatsapp.svg";
 import telegram from "../../assets/telegram.svg";
 import bigger_video_frame from "../../assets/bigger_video_frame.png";
 
-const Hero = ({ handleModalOpen }) => {
-    const socials = [
-        { text: "Facebook", img: fb },
-        { text: "WhatsApp", img: whatsapp },
-        { text: "Telegram", img: telegram },
-    ];
+const socials = [
+    { text: "Facebook", img: fb },
+    { text: "WhatsApp", img: whatsapp },
+    { text: "Telegram", img: telegram },
+];
 
+const Hero = ({ handleModalOpen }) => {
     const blobFromStorage = localStorage.getItem("blob") ? localStorage.getItem("blob") : "" ;
 
     return (
@@ -27,7 +27,8 @@ const Hero = ({ handleModalOpen }) => {
                 </section>
 
                 <section className="w-[500px] bg-color14 mt-10 py-2 px-4 flex items-center gap-2 border border-[#E7E7ED] rounded-xl placeholder:text-color2 text-lg font-normal">
-                        <input 
+                        <input
+                            name=""
                             type="text" 
                             className="focus:outline-none bg-transparent border-transparent border-none flex-1 h-full"
                             placeholder="enter email of receiver" 

@@ -9,25 +9,69 @@ import { CloseCircle, Copy, Microphone2, Screenmirroring, Setting2, Video } from
 import Toggle from "./input/toggle";
 
 import logo from "../assets/logo.svg";
-import { SuccessToast } from "./toast/toasts";
+import { ErrorToast, SuccessToast } from "./toast/toasts";
+import { RotatingLines } from "react-loader-spinner";
+import { handleVideoUpload } from "../api/services/handle-video-upload";
 
 const RecordingPopup = () => {
     const navigate = useNavigate();
-
+    
     const [camera, setCamera] = useState(false);
     const [audio, setAudio] = useState(false);
     const [recording, setRecording] = useState(false);
-
+    const [loading, setLoading] = useState(false);
 
     const handleCameraPermission = () => {
         setCamera(prev => !prev);
     }
-
+    
     const handleAudioPermission = () => {
         setAudio(prev => !prev);
     }
+    
+    
+    
+    // const endpoint = "https://ewoma-chrome-extension-two.onrender.com";
+    
+    // const handleVideoUpload = (blobUrl) => {
+    //     setLoading(true);
+    //     fetch(blobUrl)
+    //     .then(response => response.blob())
+    //     .then(blob => {
+    //         const formData = new FormData();
+    //         formData.append('video', blob, 'video.mp4');
+    //         fetch(`${endpoint}/api/upload`, {
+    //             method: 'POST',
+    //             body: formData,
+    //             headers: {
+    //                 "Content-Type": "video/mp4",
+    //             }
+    //           })
+    //             .then(response => {
+    //                 if (response.ok) {
+    //                     setLoading(false);
+    //                     console.log(response);
+    //                     console.log('Video successfully uploaded to the backend.');
+    //                     SuccessToast("Video upload successful");
+    //                     // navigate("/record", {replace: true});
+    //                 } else {
+    //                     setLoading(false);
+    //                     ErrorToast("Upload Failed");
+    //                     console.log(response);
+    //                     console.error('Failed to upload the video to the backend.');
+    //                 }
+    //             })
+    //             .catch(error => {
+    //                 setLoading(false);
+    //                 ErrorToast("Upload Failed");
+    //                 console.error('An error occurred:', error);
+    //             });
+    //         }).catch(err => console.log("error in conversion: ", err));
+    // };
 
-
+    // Initialize the array once when the component is mounted
+    const videosFromLocalStorage = JSON.parse(localStorage.getItem('videosURLFromCloudinary')) || [];
+    const [videos, setVideos] = useState(videosFromLocalStorage);
 
     const { startRecording, stopRecording } = useReactMediaRecorder({ 
         screen: true, 
@@ -39,8 +83,17 @@ const RecordingPopup = () => {
         onStop: (blobUrl) => {
             localStorage.setItem("blob", blobUrl);
             setRecording(false);
-            SuccessToast("Recording Ended");
-            navigate("record", {replace: true});
+            handleVideoUpload(blobUrl, setLoading)
+                .then((data) => {
+                    console.log(data);
+                    SuccessToast("Video upload successful");
+                    setVideos((prevVideos) => [...prevVideos, data.url]);
+                    localStorage.setItem('videosURLFromCloudinary', JSON.stringify([...videos, data.url]));
+                })
+                .catch((err) => {
+                    console.log(err);
+                    ErrorToast("Upload Failed");
+                })
         }
     });
 
@@ -104,11 +157,21 @@ const RecordingPopup = () => {
             </section>
 
             <section className="flex justify-center">
-                <button 
-                    className="bg-color4 rounded-xl flex justify-center py-2.5 px-5 text-[#FAFDFF] font-medium"
+                <button
+                    disabled={loading}
+                    className="bg-color4 rounded-xl flex gap-2 justify-center cursor-pointer items-center py-2.5 px-5 text-[#FAFDFF] font-medium transition-all"
                     onClick={handleRecording}
                 > 
-                    {recording ? 'Stop Recording' : 'Start Recording'}  
+                    { loading ? "Loading" : recording ? 'Stop Recording' : 'Start Recording'  }
+                    { loading &&
+                        <RotatingLines
+                            strokeColor="white"
+                            strokeWidth="5"
+                            animationDuration="0.75"
+                            width="20"
+                            visible={true}
+                        /> 
+                    }
                 </button>
             </section>
 
