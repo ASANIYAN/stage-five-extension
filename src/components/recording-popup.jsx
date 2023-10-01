@@ -12,6 +12,8 @@ import logo from "../assets/logo.svg";
 import { ErrorToast, SuccessToast } from "./toast/toasts";
 import { RotatingLines } from "react-loader-spinner";
 import { handleVideoUpload } from "../api/services/handle-video-upload";
+import { useCookies } from "react-cookie";
+import { useEffect } from "react";
 
 const RecordingPopup = () => {
     const navigate = useNavigate();
@@ -71,6 +73,9 @@ const RecordingPopup = () => {
 
     // Initialize the array once when the component is mounted
     const videosFromLocalStorage = JSON.parse(localStorage.getItem('videosURLFromCloudinary')) || [];
+
+    const [cookies, setCookie] = useCookies(['videosURLFromCloudinary']);
+
     const [videos, setVideos] = useState(videosFromLocalStorage);
 
     const { startRecording, stopRecording } = useReactMediaRecorder({ 
@@ -88,10 +93,10 @@ const RecordingPopup = () => {
                     console.log(data);
                     SuccessToast("Video upload successful");
                     setVideos((prevVideos) => [...prevVideos, data.url]);
-                    localStorage.setItem('videosURLFromCloudinary', JSON.stringify([...videos, data.url]));
+                    setCookie('videosURLFromCloudinary', JSON.stringify([...videos, data.url]));
+                    navigate("/record");
                 })
                 .catch((err) => {
-                    console.log(err);
                     ErrorToast("Upload Failed");
                 })
         }
